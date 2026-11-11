@@ -58,7 +58,7 @@ st.markdown(
     """
 Eine **Behandlung** (hier: eine Wartung des Kühlaggregats) beginnt irgendwann nach der Ankunft eines Containers, sobald ein Techniker Zeit hat. Wer die Container einteilt in **„je behandelt“** und
 **„nie behandelt“** und beide **ab Tag 0** vergleicht, rechnet die Wartezeit als behandelt: Ein Container musste den Beginn **erleben**, um in die erste Gruppe zu kommen. Diese **unsterbliche Zeit**
-lässt die Behandlung schützend aussehen, auch wenn sie nichts bewirkt. Eine **Landmarke** (Status zu einem festen Tag τ) vermeidet das, verliert aber Container und findet eine echte Wirkung nur zum
+lässt die Behandlung schützend aussehen, auch wenn sie nichts bewirkt. Eine **Landmarke** (Status zu einem festen Tag τ) mindert das, verliert aber Container und findet eine echte Wirkung nur zum
 Teil; die **zeitabhängige** Auswertung teilt die Person-Zeit auf und trifft sie (so zeigt es diese Welt, nicht jede Welt).
 
 **Annahme in dieser Demo: Die Zensierung ist unabhängig vom Ereignis.** Hier gibt es keine Zensierung, jeder Container wird bis zum Ausfall beobachtet; die Annahme wird nicht gebraucht und nicht geprüft.
@@ -69,6 +69,19 @@ Weiter unten: **🔬 Experiment 1** (sechs Container von Hand), **❓ Kernfrage 
 """
 )
 
+# erklaerseite:einfach:start (erzeugt von tools/set_demo_explainer.py (Website-Repo) aus tools/content/explainers/immortal-time-erklaert.json, nicht von Hand ändern)
+with st.expander("💬 In einfachen Worten"):
+    st.markdown(
+        """
+Die Demo zeigt, wie eine **Behandlung** (hier: die Wartung eines Kühlaggregats) schützend aussieht, obwohl sie nichts bewirkt. Sie beginnt erst nach einer Wartezeit. Teilt man die Container in „je behandelt“ und „nie behandelt“ ein und vergleicht beide ab der Ankunft, zählt die Wartezeit der behandelten Gruppe mit: In ihr kann nichts ausfallen, denn sonst gehörte der Container nicht in diese Gruppe. Das ist die **unsterbliche Zeit** (*immortal time*).
+
+Ein fester Stichtag (**Landmarke**) vermeidet diesen Schein, verliert aber Container und findet eine echte Wirkung nur zum Teil. Die **zeitabhängige** Auswertung rechnet jeden Container bis zum Beginn als unbehandelt und danach als behandelt und trifft die Wirkung. Das zeigt diese ausgedachte Welt, nicht jede Welt.
+
+[Ausführlich und verständlich erklärt, mit Fachteil](https://sebastianhanisch.net/immortal-time-erklaert.html)
+        """
+    )
+# erklaerseite:einfach:end
+
 with st.expander("So funktioniert die Auswertung mit Behandlungsbeginn", expanded=True):
     st.markdown(
         """
@@ -76,7 +89,7 @@ with st.expander("So funktioniert die Auswertung mit Behandlungsbeginn", expande
    Ausfälle vor dem Beginn landen dagegen in der Gruppe „unbehandelt“.
 2. **Landmarke τ:** Nur wer τ erlebt, bleibt; der Status gilt zu τ (behandelt = Beginn bis τ), die Risikomenge beginnt erst bei τ. Spätere Behandlungen bleiben unbeachtet: Wer erst nach τ behandelt wird, zählt als unbehandelt.
 3. **Zeitabhängig:** Die Person-Zeit wird aufgeteilt. Bis zum Beginn ist ein Container unbehandelt, danach behandelt; jeder Abschnitt ist eine eigene Zeile mit Start und Ende, der Ausfall gehört zum letzten Abschnitt.
-4. **Warum das hilft:** In jedem Zeitpunkt vergleicht die Cox-Rechnung die Container, die zu diesem Zeitpunkt noch da sind, nach ihrem Status **zu diesem Zeitpunkt**. Mehr braucht die Auswertung in dieser Welt nicht (Beginn unabhängig von Lebenszeit und Zustand).
+4. **Warum das hilft:** In jedem Zeitpunkt vergleicht die Cox-Rechnung die Container, die zu diesem Zeitpunkt noch da sind, nach ihrem Status **zu diesem Zeitpunkt**. Mehr braucht die Auswertung in dieser Welt nicht (Beginn unabhängig von der Lebenszeit ohne Behandlung und vom Zustand).
         """
     )
 
@@ -92,7 +105,7 @@ with st.sidebar:
     beta = st.slider("Wahre Wirkung β der Behandlung", *bounds("beta_slider"), step=C.BETA_STEP, key="beta_slider",
                      help="Log-Hazard-Verhältnis: Ab dem Behandlungsbeginn gilt die Rate mal e hoch β. 0 heißt keine Wirkung, −0,5 senkt die Rate auf das 0,61-fache, positive Werte schaden.")
     wait = st.slider("Mittlere Wartezeit bis zur Behandlung (Tage)", *bounds("wait_slider"), step=C.WAIT_STEP, key="wait_slider",
-                     help="Der Behandlungsbeginn ist exponentialverteilt mit diesem Mittel, unabhängig von der Lebenszeit. Ein Container, der vorher ausfällt, wird nie behandelt.")
+                     help="Der Behandlungsbeginn ist exponentialverteilt mit diesem Mittel, unabhängig von der Lebenszeit ohne Behandlung. Ein Container, der vorher ausfällt, wird nie behandelt.")
     n = st.slider("Container n je Lauf", *bounds("n_slider"), step=C.N_STEP, key="n_slider")
     seed = st.number_input("Zufalls-Seed der Daten", *bounds("seed_input"), key="seed_input", step=1,
                            help="Jeder Lauf hat einen eigenen, festen Zufallsstrom, der aus diesem Zufalls-Seed abgeleitet ist.")
@@ -132,7 +145,7 @@ st.markdown("## ❓ Kernfrage: Wie viel Schutz findet man, wenn man Container da
 st.subheader("🔬 Experiment 2: Die naive Einteilung und die Wartezeit")
 st.markdown(
     f"""
-Welt: Die Lebenszeit ohne Behandlung ist lognormal (Median {C.MEDIAN:g} Tage, σ = {C.SIGMA:g}). Der Behandlungsbeginn $S$ ist exponentialverteilt mit der mittleren Wartezeit der Seitenleiste, unabhängig von der Lebenszeit;
+Welt: Die Lebenszeit ohne Behandlung ist lognormal (Median {C.MEDIAN:g} Tage, σ = {C.SIGMA:g}). Der Behandlungsbeginn $S$ ist exponentialverteilt mit der mittleren Wartezeit der Seitenleiste, unabhängig von der Lebenszeit ohne Behandlung;
 ab $S$ gilt die Rate mal $e^{{\\beta}}$. Es laufen **{C.REPS} Läufe** mit festen Zufalls-Seeds, jeder mit $n$ Containern; die Einteilung ist „je behandelt“ ($S < T$), verglichen ab Tag 0 (Cox-Regression).
 """
 )
@@ -230,7 +243,7 @@ st.markdown(md_table(
 kind, text = ev.verdict_timedep(study)
 getattr(st, kind)(text)
 st.caption(
-    "Die Zielstudien-Emulation (Klonen, Zensieren, Gewichten) wird als vollständigere Lösung genannt (nur Suchtreffer, nicht gelesen); diese Demo rechnet und misst sie nicht."
+    "Die Zielstudien-Emulation (Klonen, Zensieren, Gewichten) wird laut Suchtreffern als weiterer, vollständigerer Ansatz genannt (nur Suchtreffer, nicht gelesen); diese Demo rechnet und misst sie nicht."
 )
 
 st.markdown("---")
@@ -243,7 +256,7 @@ st.markdown(
 | Annahme | Was gilt, wenn sie verletzt ist |
 |---|---|
 | **Zensierung unabhängig vom Ereignis** | Nicht gemessen: Die Welt hat keine Zensierung. Mit Zensierung sagt keine Zahl hier etwas. |
-| **Behandlungsbeginn unabhängig von Lebenszeit und Zustand** | Nicht gemessen: Wird nach dem Zustand des Containers behandelt, entsteht ein Störfaktor, den keine der drei Auswertungen beseitigt. Die Messungen gelten nur für diesen einen Mechanismus. |
+| **Behandlungsbeginn unabhängig von der Lebenszeit ohne Behandlung und vom Zustand** | Nicht gemessen: Wird nach dem Zustand des Containers behandelt, entsteht ein Störfaktor; ob eine der drei Auswertungen ihn beseitigt, ist nicht gemessen. Die Messungen gelten nur für diesen einen Mechanismus. |
 | **Konstante Wirkung ab Beginn** (Rate mal e hoch β) | Die zeitabhängige Auswertung schätzt dann ein Mittel über die Zeit; nicht gemessen. |
 | **Eine Behandlung, einmal begonnen, bleibt** | Abbruch, Wiederholung und mehrere Behandlungen sind nicht modelliert. |
 | **Genug Container mit beiden Status** | Gemessen (Reihe über die Wartezeit): Bei sehr kurzer Wartezeit sind fast alle Container behandelt, die Gruppen trennen sich, und mehrere Auswertungen haben kein oder ein unzuverlässiges Ergebnis. |
@@ -256,6 +269,25 @@ with st.expander("⚠️ Annahmen, Grenzen und bekannte Probleme"):
 st.markdown("---")
 
 with st.expander("📐 Mathematische Formulierung"):
+    # erklaerseite:lesehilfe:start (erzeugt von tools/set_demo_explainer.py (Website-Repo) aus tools/content/explainers/immortal-time-erklaert.json, nicht von Hand ändern)
+    st.markdown(
+        r"""
+**Lesehilfe.** Gegeben ist je Container die Lebenszeit $T_i$ (alle Ausfälle sind beobachtet) und der Behandlungsbeginn $S_i$ (die Behandlung wirkt nur, wenn $S_i < T_i$). Gesucht ist das log-Hazard-Verhältnis $\beta$ der Behandlung, also wie stark sich die Ausfallrate ab dem Beginn ändert.
+
+| Symbol | Bedeutung |
+|---|---|
+| $T_i$, $S_i$ | Lebenszeit bis zum Ausfall und Behandlungsbeginn des Containers $i$ |
+| $h_0(t)$, $H_0(t)$ | Grundrate (lognormal) und ihr Integral, die kumulierte Grundrate |
+| $\beta$ | wahres log-Hazard-Verhältnis: ab $S_i$ gilt die Rate $h_0(t)\,e^{\beta}$; 0 heißt keine Wirkung |
+| $E_i$ | Zufallszahl $\mathrm{Exp}(1)$, der „Verbrauch“ an Grundrate bis zum Ausfall |
+| $x_i(t)$ | Behandlungsstatus des Containers $i$ zur Zeit $t$ (1 = behandelt) |
+| $R(t)$ | Risikomenge: die Container, die zur Zeit $t$ noch da sind |
+| $\tau$ | Landmarke: der feste Tag, an dem der Status festgehalten wird |
+
+[Schritt für Schritt erklärt, mit Herleitung und Literatur](https://sebastianhanisch.net/immortal-time-erklaert.html#fachleute)
+        """
+    )
+    # erklaerseite:lesehilfe:end
     st.markdown(
         r"""
 **Lesehilfe.** *Gegeben:* je Container die Lebenszeit $T_i$ (alle Ausfälle beobachtet) und der Behandlungsbeginn $S_i$ (die Behandlung wirkt nur, wenn $S_i < T_i$). *Gesucht:* das log-Hazard-Verhältnis $\beta$ der Behandlung.
@@ -296,7 +328,7 @@ die Landmarke $\tau = 3{,}5$ behält die Container 3, 4, 5, 6 mit $7{,}0$ gegen 
 Dass die Landmarke eine echte Wirkung unterschätzt, lesen wir als Verdünnung: Wer nach $\tau$ behandelt wird, bleibt in der Vergleichsgruppe. Die Prüfung steht in der README (Variante, die später Behandelte beim Beginn zensiert).
 
 **Literatur.** J. Wang, P. N. Peduzzi, M. Wininger und S. Ma, Statistical Methods for Accommodating Immortal Time: A Selective Review and Comparison, arXiv:2202.02369: im Volltext gelesen. In ihrer Simulation
-(wahres log-Hazard-Verhältnis +0,5) verzerren Verfahren mit neu gesetztem Nullpunkt stark; die Landmarke mindert die Verzerrung, verzerrt aber weiter (in ihrer Simulation etwa −0,05 bis −0,17 bei wahr +0,5), und die zeitabhängige Modellierung gilt dort als Goldstandard.
+(wahres log-Hazard-Verhältnis +0,5) verzerren Verfahren mit neu gesetztem Nullpunkt stark; die Landmarke mindert die Verzerrung, verzerrt aber weiter (in ihrer Simulation etwa −0,05 bis −0,17 bei wahr +0,5), und die zeitabhängige Modellierung gilt dort als Goldstandard, wenn sie sauber ausgeführt wird.
 M. A. Hernán, J. A. C. Sterne, J. P. T. Higgins, I. Shrier und S. Hernández-Díaz, A structural description of biases that generate immortal time, Epidemiology (online 4. 11. 2024, DOI 10.1097/EDE.0000000000001808): nur der Abstract gelesen.
 Die Größe des Verlusts der Landmarke in dieser Demo ist Eigenmessung, kein Literaturwert. Die Formeln oben sind gegen unabhängige Rechnungen geprüft (`tests/test_oracle_immortal_time.py`).
         """
@@ -306,5 +338,5 @@ st.markdown("---")
 st.caption(
     "Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – "
     "Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). "
-    "Mehr zu den Demos: [Interaktive Demos](https://sebastianhanisch.net/demos.html)."
+    "Mehr zur Reihe: [Überlebenszeit: zensierte Zeiten lesen](https://sebastianhanisch.net/konzepte-ueberlebenszeit.html)."
 )

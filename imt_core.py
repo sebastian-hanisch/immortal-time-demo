@@ -1,4 +1,4 @@
-"""Kopie aus ueberlebenszeit-planung/kern/uz_core.py, Stand 2026-11-10 (nur die Funktionen dieser Demo; der Rest ist gelöscht).
+"""Kopie des gemeinsamen Kerns uz_core.py der Überlebenszeit-Linie, Stand 2026-11-10 (nur die Funktionen dieser Demo; der Rest ist gelöscht).
 
 Enthalten: SplitMix64 (Zufall; die Methoden `lognormal` und `weibull` sind gelöscht, die Demo braucht sie nicht), SurvivalError und check_data (Eingabeprüfung)
 und die Cox-Partial-Likelihood `cox_fit` mit Eintrittszeit (Breslow, Newton mit Schrittweitenhalbierung, Konvergenzflag, Erkennung perfekter Trennung auch bei einem

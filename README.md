@@ -1,7 +1,6 @@
 # Immortal Time: behandelt, weil man lange genug lebte – Streamlit-Demo
 
-<!-- TODO nach dem Deploy: direkt hierher den Live-Link setzen (Leerzeile davor und danach):
-**[→ Demo live ausprobieren](https://sebastianhanisch-immortal-time-demo.streamlit.app/)** -->
+**[→ Demo live ausprobieren](https://sebastianhanisch-immortal-time-demo.streamlit.app/)**
 
 Teil der Linie **Überlebenszeit** (Zeit bis zum Ereignis bei Beobachtungen, die irgendwann abbrechen) in der „Konzepte“-Reihe für die Website „Sebastian Hanisch – Operations Research und Machine Learning“.
 Der Aufhänger ist ein Container mit einer **Lebenszeit** (Tage bis zum Ausfall seines Kühlaggregats; ausgedachte Welt) und einer **Behandlung** (hier: eine Wartung), die irgendwann nach der Ankunft beginnt, sobald ein Techniker Zeit hat.
@@ -22,18 +21,18 @@ Die Behandlung scheint die Ausfallrate auf das 0,28-fache zu senken, obwohl sie 
 die zeitabhängige Auswertung −0,006 ± 0,005. Die Kernfrage ist: Wie viel Schutz findet man, wenn man Container danach einteilt, ob sie je behandelt wurden, und was hilft? Das Hazard-Verhältnis 0,28 gilt nur für diese Welt
 (keine Wirkung, Wartezeit 4 Tage, Lebenszeit Median 4 Tage, n = 1000), nicht allgemein.
 
-## Befunde und Korrekturen gegenüber dem Plan
+## Befunde und Korrekturen gegenüber der ersten Messung
 
-(Plan: `PLAN-10-immortal-time.md` der Linien-Planung; Messung dort: 200 Läufe mit numpy-Zufall, Rohausgaben `out_uz_v12_bis_v15.txt` (V14) und `out_uz_v16_bis_v19.txt` (V18).)
+Vormessung = eine erste, schnelle Messung vor dem Bau der Demo, mit dem Zufallsgenerator von NumPy und 200 Läufen. Die Zahlen daraus stehen hier nur als Vergleichswerte; es gilt die Zahl dieser Demo.
 
-1. **Zahlen weichen ab, es gilt die Zahl dieser Demo.** Vormessung (numpy-Zufall): naiv −1,276 ± 0,005 (V14) bzw. −1,274 (V18), Landmarke Tag 2 −0,002 bzw. 0,002, zeitabhängig −0,008; mit Wirkung naiv −1,719,
+1. **Zahlen weichen ab, es gilt die Zahl dieser Demo.** Vormessung (numpy-Zufall): naiv −1,276 ± 0,005 bzw. −1,274 (zwei Messzellen), Landmarke Tag 2 −0,002 bzw. 0,002, zeitabhängig −0,008; mit Wirkung naiv −1,719,
    Landmarke Tag 2 / 4 −0,192 / −0,189 (802 / 570 Container), zeitabhängig −0,512. Diese Demo (SplitMix64, Zufalls-Seed 35, 200 Läufe, gleiche Welt) steht in der Tabelle unten; die Abstände zur Vormessung liegen im
    Bereich der Streuung zwischen Zufalls-Seeds (Stabilitätstabelle unten).
-2. **Der Plan sagt „die naive Verzerrung wächst mit der Wartezeit“; die Messung sagt das Gegenteil.** Bei Wahrheit β = 0 liegt das naive β̂ bei einer mittleren Wartezeit von 0,5 Tagen bei −2,75 und fällt über 1, 2, 4, 8 auf −0,93
-   bei 16 Tagen (Tabelle unten, 100 Läufe je Wartezeit); es verschwindet in keiner der sechs Wartezeiten. Die Scheinwirkung ist **bei der kürzesten gemessenen Wartezeit (0,5 Tage) am größten**; bei noch kürzerer Wartezeit sind fast alle Container behandelt, und die Auswertung hat kein Ergebnis. Unsere Lesart (Deutung, nicht gemessen):
-   Bei kurzer Wartezeit zählen fast alle Container als behandelt, und die wenigen unbehandelten sind genau die, die vor ihrem Beginn ausfallen. Die Plan-Eigenschaft „ohne Wartezeit verschwindet die Verzerrung“
+2. **Die ursprüngliche Erwartung war „die naive Verzerrung wächst mit der Wartezeit“; die Messung zeigt das Gegenteil.** Bei Wahrheit β = 0 liegt das naive β̂ bei einer mittleren Wartezeit von 0,5 Tagen bei −2,75 und fällt über 1, 2, 4, 8 auf −0,93
+   bei 16 Tagen (Tabelle unten, 100 Läufe je Wartezeit); es verschwindet in keiner der sechs Wartezeiten. Die Scheinwirkung ist **bei der kürzesten gemessenen Wartezeit (0,5 Tage) am größten**. Bei noch kürzerer Wartezeit sind fast alle Container behandelt; ein Test mit 0,1 Tagen (15 Läufe, ohne Wirkung, naive Auswertung) meldet dann in einem Teil der Läufe Trennung statt einer Zahl, also kein Ergebnis (nur dieser Test, keine Messzelle). Unsere Lesart (Deutung, nicht gemessen):
+   Bei kurzer Wartezeit zählen fast alle Container als behandelt, und die wenigen unbehandelten sind genau die, die vor ihrem Beginn ausfallen. Die ursprüngliche Erwartung „ohne Wartezeit verschwindet die Verzerrung“
    gilt nur für eine zufällige, von der Lebenszeit unabhängige **Vorab-Zuteilung**, bei der der Status am Tag 0 feststeht (Messung unten: −0,001 ± 0,004), nicht für eine Wartezeit, die im Erzeuger gegen 0 geht.
-3. **Die Größe des Verlusts der Landmarke hängt in dieser Welt (β = −0,5, Wartezeit 4 Tage) kaum am τ, aber an der Wartezeit.** Der Plan nennt −0,19 statt −0,50 (Wartezeit 4 Tage). In der Reihe über die Wartezeit (β = −0,5) findet die Landmarke Tag 2 bei 0,5 Tagen −0,05,
+3. **Die Größe des Verlusts der Landmarke hängt in dieser Welt (β = −0,5, Wartezeit 4 Tage) kaum am τ, aber an der Wartezeit.** Die erste Messung nannte −0,19 statt −0,50 (Wartezeit 4 Tage). In der Reihe über die Wartezeit (β = −0,5) findet die Landmarke Tag 2 bei 0,5 Tagen −0,05,
    bei 16 Tagen −0,33; über alle 16 Landmarken von τ = 0,5 bis 8 Tage (Wartezeit 4 Tage) liegt das mittlere β̂ nur zwischen −0,201 und −0,166, während die Streuung zwischen den Läufen von 0,09 auf 0,21 wächst
    und die Zahl der verbleibenden Container von 990 auf 324 fällt.
 4. **Neu: die Deutung „Verdünnung“ ist geprüft.** Zählt man die bei τ noch Unbehandelten, die später behandelt werden, nicht als unbehandelt weiter, sondern zensiert sie bei ihrem Beginn, findet die Landmarke die Wirkung:
@@ -42,14 +41,13 @@ die zeitabhängige Auswertung −0,006 ± 0,005. Die Kernfrage ist: Wie viel Sch
    streng genommen eine andere Größe als β, siehe Ehrliche Grenzen). Bei Wartezeit 0,5 Tage hat die Landmarke Tag 4 in 83 von 100 Läufen kein Ergebnis (perfekte Trennung: fast alle Container sind bis dahin behandelt), die Zahl in der Tabelle
    mittelt dann nur 17 Läufe.
 6. **Neu: schädliche Behandlung.** Bei Wahrheit β = +0,5 findet die naive Auswertung −0,866 ± 0,006 (scheinbarer Schutz), Landmarke Tag 2 0,283 ± 0,005, Tag 4 0,261 ± 0,007, zeitabhängig 0,496 ± 0,005.
-7. **Handbeispiel anders gelesen.** Der Plan schreibt, die Behandlung wirke „hier nirgends“. In der App steht nur, was die Rechnung zeigt (Landmarke 3,5: 7,0 gegen 7,0); sechs ausgedachte Container sagen nichts über eine Welt.
-8. **Nicht gebaut aus dem Plan:** Ein Fremdpaket-Vergleich (lifelines, statsmodels fehlen im Test-venv); stattdessen die Orakel unten.
-9. **Footer:** `new_demo.py` nahm `--line ueberlebenszeit` an, hat aber keine Konzepte-Spezifikation und setzt den Platzhalter `demos.html`; vor der Website-Einbindung auf die Linie umstellen (`set_demo_footer.py`).
+7. **Handbeispiel anders gelesen.** Die ursprüngliche Erwartung war, die Behandlung wirke „hier nirgends“. In der App steht nur, was die Rechnung zeigt (Landmarke 3,5: 7,0 gegen 7,0); sechs ausgedachte Container sagen nichts über eine Welt.
+8. **Nicht gebaut:** Ein Vergleich mit einem fremden Paket (lifelines, statsmodels sind im Test-Umfeld nicht installiert); stattdessen die Orakel unten, unabhängig geschriebene Verfahren.
 
 ## Modell
 
 Container $i$ hat die Lebenszeit $T_i$ und den Behandlungsbeginn $S_i$ (die Behandlung wirkt nur, wenn $S_i < T_i$). Die Rate ist $h_0(t)$ bis $S_i$ und $h_0(t)\,e^{\beta}$ danach; $h_0$ gehört zur Lognormalverteilung (Median 4 Tage,
-σ = 0,9), $S_i$ ist exponentialverteilt (Mittel einstellbar, Voreinstellung 4 Tage), unabhängig von der Lebenszeit. Der Erzeuger zieht $E_i \sim \mathrm{Exp}(1)$ und setzt $H_0(T_i) = E_i$ für $E_i < H_0(S_i)$, sonst
+σ = 0,9), $S_i$ ist exponentialverteilt (Mittel einstellbar, Voreinstellung 4 Tage), unabhängig von der Lebenszeit ohne Behandlung (bei β ≠ 0 hängt die beobachtete Lebenszeit über die Wirkung von $S_i$ ab). Der Erzeuger zieht $E_i \sim \mathrm{Exp}(1)$ und setzt $H_0(T_i) = E_i$ für $E_i < H_0(S_i)$, sonst
 $H_0(T_i) = H_0(S_i) + (E_i - H_0(S_i))\,e^{-\beta}$; die Umkehrung von $H_0$ braucht die Umkehrfunktion der Normalverteilung (selbst geschrieben, gegen scipy nur in den Tests geprüft). Drei Auswertungen, jeweils eine Cox-Regression (Breslow)
 mit einem 0/1-Merkmal „behandelt“ und alle Ausfälle beobachtet:
 
@@ -84,6 +82,8 @@ Welt, wenn nichts anderes steht: Lebenszeit lognormal (Median 4 Tage, σ = 0,9),
 | Landmarke Tag 2 (bleiben: 779 / 801) | 0,005 ± 0,005 | 97 % | −0,190 ± 0,005 | 0 % |
 | Landmarke Tag 4 (bleiben: 500 / 567) | −0,010 ± 0,007 | 95 % | −0,201 ± 0,007 | 10 % |
 | zeitabhängig (aufgeteilte Person-Zeit) | −0,006 ± 0,005 | 97 % | −0,507 ± 0,005 | 96 % |
+
+Die Zahlen der verbleibenden Container (779 / 801 bei Tag 2, 500 / 567 bei Tag 4) weichen leicht von denen der Wartezeit-Reihen bei 4 Tagen unten ab (778 / 800 und 501 / 568). Vermutliche Ursache (Deutung, nicht einzeln geprüft): Diese Tabelle mittelt 200 Läufe, die Reihen 100 Läufe je Wartezeit.
 
 - Naiv: β̂ = −1,278 ± 0,006 (Hazard-Verhältnis 0,28) ohne Wirkung und −1,720 ± 0,006 (Hazard-Verhältnis 0,18) mit Wirkung β = −0,5; das Intervall enthält die Wahrheit in keinem der 200 Läufe.
 - Landmarke ohne Wirkung: Tag 2 0,005 ± 0,005, Tag 4 −0,010 ± 0,007 (jeweils innerhalb von 2 Standardfehlern des Mittels von 0). Mit Wirkung findet sie nur einen Teil: 38 % bzw. 40 % der Wirkung (β̂ geteilt durch β, Verhältnis der Mittel; Eigenmessung).
@@ -159,7 +159,7 @@ am Beginn der Nachbeobachtung zufällig und unabhängig von der Lebenszeit fests
 
 ## Ehrliche Grenzen
 
-- **Ein Mechanismus.** Der Behandlungsbeginn ist unabhängig von Lebenszeit und Zustand des Containers (Exponential-Wartezeit). Wird nach dem Zustand behandelt, kommt ein Störfaktor hinzu; das ist nicht gemessen, und keine der drei Auswertungen beseitigt ihn.
+- **Ein Mechanismus.** Der Behandlungsbeginn ist unabhängig von der Lebenszeit ohne Behandlung und vom Zustand des Containers (Exponential-Wartezeit). Wird nach dem Zustand behandelt, kommt ein Störfaktor hinzu; das ist nicht gemessen, auch nicht, ob eine der drei Auswertungen ihn beseitigt.
 - **Konstante Wirkung, eine Behandlung, keine Zensierung, keine Anfälligkeit.** Andere Formen der Wirkung oder der Grundrate sind nicht gemessen.
 - **Die Landmarke schätzt eine andere Größe als β.** Sie vergleicht „bis τ behandelt“ mit „bis τ nicht behandelt“ unter den Überlebenden bis τ. Ein Abstand zu β ist deshalb kein Fehler der Rechnung allein; die Überdeckung gegen β ist nur ein Maß
   für den Abstand, kein Test der Landmarke gegen ihre eigene Zielgröße.
@@ -173,7 +173,7 @@ am Beginn der Nachbeobachtung zufällig und unabhängig von der Lebenszeit fests
 
 **Annahmen dieser Demo**
 - **Zensierung unabhängig vom Ereignis:** In dieser Welt gibt es keine Zensierung, jeder Container wird bis zu seinem Ausfall beobachtet. Die Annahme wird hier nicht gebraucht und nicht geprüft; mit Zensierung ist nichts gemessen.
-- **Die Behandlung beginnt unabhängig von Lebenszeit und Zustand des Containers** (Beginn nach einer Exponential-Wartezeit, ohne Blick auf den Container). Wird nach dem Zustand behandelt, kommt ein Störfaktor hinzu; das ist hier nicht gemessen.
+- **Die Behandlung beginnt unabhängig von der Lebenszeit ohne Behandlung und vom Zustand des Containers** (Beginn nach einer Exponential-Wartezeit, ohne Blick auf den Container; bei β ≠ 0 hängt die beobachtete Lebenszeit über die Wirkung vom Beginn ab). Wird nach dem Zustand behandelt, kommt ein Störfaktor hinzu; das ist hier nicht gemessen.
 - **Die Wirkung ist konstant:** Ab dem Beginn gilt die Rate mal e^β, vorher die Grundrate. Die Grundrate ist lognormal (Median 4 Tage, σ = 0,9). Andere Formen der Wirkung oder der Grundrate sind nicht gemessen.
 - **Die Container sind unabhängig voneinander;** es gibt keine unbeobachtete Anfälligkeit und keine weiteren Merkmale.
 
@@ -191,12 +191,12 @@ am Beginn der Nachbeobachtung zufällig und unabhängig von der Lebenszeit fests
 ## Quellen und Lesestufen
 
 - J. Wang, P. N. Peduzzi, M. Wininger und S. Ma, *Statistical Methods for Accommodating Immortal Time: A Selective Review and Comparison*, arXiv:2202.02369: **im Volltext gelesen**. Landmarke bedingt auf den Status bei τ und verliert Zielpopulation und Präzision;
-  die Wahl ist schwierig und subjektiv; ohne die Annahmen einer gültigen Karenzzeit sei sie eher beschreibend als kausal (sinngemäß); zeitabhängige Modellierung gilt als Goldstandard. In ihrer Simulation (n = 5 000, wahres log-Hazard-Verhältnis +0,5,
-  Landmarken 3, 6, 9 Monate) haben alle Verfahren mit neu gesetztem Nullpunkt negativen Bias, die Landmarke am wenigsten (etwa −0,05 bis −0,17), die Überdeckung der Intervalle liegt bei der Landmarke oft nur bei 57 bis 93 %.
+  die Wahl ist schwierig und subjektiv; ohne die Annahmen einer gültigen Karenzzeit sei sie eher beschreibend als kausal (sinngemäß); zeitabhängige Modellierung gilt als Goldstandard, wenn sie sauber ausgeführt wird. In ihrer Simulation (n = 5 000, wahres log-Hazard-Verhältnis +0,5,
+  Landmarken 3, 6, 9 Monate) haben alle Verfahren mit neu gesetztem Nullpunkt negativen Bias, die Landmarke am wenigsten (etwa −0,05 bis −0,17), die Überdeckung der Intervalle liegt bei der Landmarke bei 57 bis 93 % (Spanne der Quelle, hier nicht nach Szenario aufgeschlüsselt).
   **Das stützt die Richtung der Eigenmessung (die Landmarke mindert die Verzerrung, unterschätzt aber den Betrag der echten Wirkung), nicht die Größe**; −0,19 statt −0,50 ist Eigenmessung in einer anderen Welt und kein Literaturwert.
 - M. A. Hernán, J. A. C. Sterne, J. P. T. Higgins, I. Shrier und S. Hernández-Díaz, *A structural description of biases that generate immortal time*, Epidemiology (online 4. 11. 2024, DOI 10.1097/EDE.0000000000001808): **nur der Abstract gelesen**.
   Immortal Time entsteht demnach durch Auswahl nach Kriterien, die erst nach der Zuteilung gelten, oder durch Fehlklassifikation; Zielstudien-Emulation verhindert das. Aussagen zur Landmarke im Volltext konnten nicht gelesen werden.
-- Zielstudien-Emulation (Klonen–Zensieren–Gewichten) als vollständigere Lösung: **nur Suchtreffer**, nicht gelesen.
+- Zielstudien-Emulation (Klonen–Zensieren–Gewichten): ein weiterer, vollständigerer Ansatz laut Suchtreffern (nicht gelesen): **nur Suchtreffer**.
 - **Zum Namen** (eigene Lesart): „Immortal Time“ beschreibt die Auswertung, nicht die Container: Sie sind in dieser Zeit sterblich, es zählt nur so, als wären sie es nicht. Dass jemand den Namen „irreführend“ nennt, steht im gelesenen Abstract nicht
   (im Volltext nicht geprüft); der Mechanismus ist real und hier gemessen.
 
@@ -218,7 +218,7 @@ Die Suite hat **129 Tests** (`pytest --collect-only -q tests`); Modell-, Orakel-
 | `tests/test_app.py`, `test_footer.py`, `test_runtime_imports.py` | AppTest-Rauchtest (jeder Button, Regler an Minimum und Maximum, Kombination aller Ränder, Experimentregler an den Rändern, Voreinstellung und Preset mit Wirkung), Footer, Laufzeit-Importe gegen `requirements.txt` |
 
 **Zahl → Test.** Zahlen aus den Messungen und aus den Presets: eingefroren in der JSON-Datei und in `tests/test_claims.py` mit dem Code der Demo neu gerechnet (Band 1e-6, Zählungen exakt; die Cox-Anpassung ist iterativ, ein Linux-Lauf wich in der neunten Stelle ab); die Tabellen der README stammen Wort für Wort aus der Datei.
-Die Brüche des Handbeispiels: exakt in `tests/test_model.py`. Das „Verhältnis der Mittel“ (38 % und 40 %) und die Spannen der Reihen folgen aus denselben Zahlen (`tests/test_claims.py`). Die Plan-Zahlen aus der Vormessung stehen nur als Vergleich im Abschnitt „Befunde und Korrekturen gegenüber dem Plan“.
+Die Brüche des Handbeispiels: exakt in `tests/test_model.py`. Das „Verhältnis der Mittel“ (38 % und 40 %) und die Spannen der Reihen folgen aus denselben Zahlen (`tests/test_claims.py`). Die Zahlen der Vormessung stehen nur als Vergleich im Abschnitt „Befunde und Korrekturen gegenüber der ersten Messung“.
 Nicht im Test: die Deutung „bei kurzer Wartezeit sind die Unbehandelten die frühen Ausfälle“ (eigene Lesart) und die Lesestufen der Quellen.
 
 
@@ -227,7 +227,7 @@ Nicht im Test: die Deutung „bei kurzer Wartezeit sind die Unbehandelten die fr
 | Datei | Inhalt |
 |---|---|
 | `app.py` | Streamlit-App: vier Experimente, Annahmen, Formeln |
-| `imt_core.py` | wörtliche Kopie aus `ueberlebenszeit-planung/kern/uz_core.py` (Stand 2026-11-10): SplitMix64, `check_data`, `cox_fit` mit Eintritt |
+| `imt_core.py` | Kopie des gemeinsamen Kerns `uz_core.py` der Überlebenszeit-Linie (Stand 2026-11-10): SplitMix64, `check_data`, `cox_fit` mit Eintritt; wird nicht verändert |
 | `imt_scenario.py` | Welt und Erzeuger, Umkehrfunktion der Normalverteilung, kumulierte Grundrate |
 | `imt_model.py` | die drei Auswertungen als Zeilen, schnelle Cox-Anpassung für ein 0/1-Merkmal, Handbeispiel in Brüchen, Läufe und Zusammenfassungen |
 | `imt_evaluation.py` | Formatierung und Verdikte (reine Funktionen) |
@@ -266,4 +266,4 @@ Gebaut mit Streamlit, Plotly und NumPy.
 
 ---
 
-Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zu den Demos: [Interaktive Demos](https://sebastianhanisch.net/demos.html).
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Überlebenszeit: zensierte Zeiten lesen](https://sebastianhanisch.net/konzepte-ueberlebenszeit.html).

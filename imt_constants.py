@@ -46,7 +46,7 @@ PRESET_HELP = {
 ASSUMPTIONS_MARKDOWN = """\
 **Annahmen dieser Demo**
 - **Zensierung unabhängig vom Ereignis:** In dieser Welt gibt es keine Zensierung, jeder Container wird bis zu seinem Ausfall beobachtet. Die Annahme wird hier nicht gebraucht und nicht geprüft; mit Zensierung ist nichts gemessen.
-- **Die Behandlung beginnt unabhängig von Lebenszeit und Zustand des Containers** (Beginn nach einer Exponential-Wartezeit, ohne Blick auf den Container). Wird nach dem Zustand behandelt, kommt ein Störfaktor hinzu; das ist hier nicht gemessen.
+- **Die Behandlung beginnt unabhängig von der Lebenszeit ohne Behandlung und vom Zustand des Containers** (Beginn nach einer Exponential-Wartezeit, ohne Blick auf den Container; bei β ≠ 0 hängt die beobachtete Lebenszeit über die Wirkung vom Beginn ab). Wird nach dem Zustand behandelt, kommt ein Störfaktor hinzu; das ist hier nicht gemessen.
 - **Die Wirkung ist konstant:** Ab dem Beginn gilt die Rate mal e^β, vorher die Grundrate. Die Grundrate ist lognormal (Median 4 Tage, σ = 0,9). Andere Formen der Wirkung oder der Grundrate sind nicht gemessen.
 - **Die Container sind unabhängig voneinander;** es gibt keine unbeobachtete Anfälligkeit und keine weiteren Merkmale.
 

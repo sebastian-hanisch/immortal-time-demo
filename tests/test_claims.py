@@ -171,7 +171,7 @@ def test_stichprobengroesse_aendert_den_verlust_der_landmarke_nicht_aber_die_str
 
 
 def test_vergleich_mit_der_vormessung_steht_mit_der_quelle_in_der_readme():
-    for needle in ("out_uz_v12_bis_v15.txt", "out_uz_v16_bis_v19.txt", "−1,276 ± 0,005", "−1,719", "−0,192 / −0,189 (802 / 570 Container)"):
+    for needle in ("Vormessung = eine erste, schnelle Messung", "−1,276 ± 0,005", "−1,719", "−0,192 / −0,189 (802 / 570 Container)"):
         assert needle in README, needle
     # die Abstände zur Vormessung (numpy-Zufall) liegen im Bereich der Streuung zwischen den Zufalls-Seeds der Demo
     naive = [c["zero"]["naive"]["mean"] for c in DATA["stability"].values()]

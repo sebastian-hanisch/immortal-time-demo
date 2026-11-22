@@ -61,7 +61,7 @@ def build_estimates(study: M.Study, tau: float | None, show=("naive", "landmark"
     for label, values, color in entries:
         fig.add_trace(go.Box(y=np.round(values, 4).tolist(), name=label, marker_color=color, boxpoints="all", jitter=0.5, pointpos=0, boxmean=True, hovertemplate="β̂ = %{y:.3f}<extra></extra>"))
     fig.add_hline(y=study.world.beta, line_color=C.COLOR_TRUTH, line_width=2, annotation_text=f"Wahrheit β = {study.world.beta:g}", annotation_position="top left")
-    fig.update_yaxes(title_text="geschätztes β̂ (log-Hazard-Verhältnis)", zeroline=False)
+    fig.update_yaxes(title_text="geschätztes β̂ (log-Hazard-Ratio)", zeroline=False)
     fig.update_layout(showlegend=False)
     return _base(fig, 400)
 

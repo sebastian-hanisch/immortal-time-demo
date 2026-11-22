@@ -73,8 +73,8 @@ def _truth_phrase(beta: float) -> str:
     if beta == 0:
         return "In dieser Welt wirkt die Behandlung nicht (β = 0)"
     if beta < 0:
-        return f"In dieser Welt senkt die Behandlung die Rate (β = {num(beta, 1)}, Hazard-Verhältnis {hr(beta)})"
-    return f"In dieser Welt erhöht die Behandlung die Rate (β = {num(beta, 1, True)}, Hazard-Verhältnis {hr(beta)})"
+        return f"In dieser Welt senkt die Behandlung die Rate (β = {num(beta, 1)}, Hazard-Ratio {hr(beta)})"
+    return f"In dieser Welt erhöht die Behandlung die Rate (β = {num(beta, 1, True)}, Hazard-Ratio {hr(beta)})"
 
 
 def verdict_naive(study: M.Study) -> tuple[str, str]:
@@ -83,7 +83,7 @@ def verdict_naive(study: M.Study) -> tuple[str, str]:
     w = study.world
     if s.runs == 0:
         return "warning", f"Die naive Auswertung hat in keinem der {study.reps} Läufe ein Ergebnis (meist perfekte Trennung: fast alle Container zählen als behandelt). Bei Wartezeit {num(w.wait, 1)} Tage ist hier nichts zu schätzen."
-    head = f"{_truth_phrase(w.beta)}. Die naive Auswertung findet im Mittel über {s.runs} Läufe β̂ = {num(s.mean, 2)} ± {num(s.se_mean, 3)} (Hazard-Verhältnis {hr(s.mean)})"
+    head = f"{_truth_phrase(w.beta)}. Die naive Auswertung findet im Mittel über {s.runs} Läufe β̂ = {num(s.mean, 2)} ± {num(s.se_mean, 3)} (Hazard-Ratio {hr(s.mean)})"
     if s.failed:
         head += f"; in {s.failed} Läufen gab es kein Ergebnis"
     if s.mean < w.beta - 2 * s.se_mean and w.beta >= 0:

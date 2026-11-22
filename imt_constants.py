@@ -3,7 +3,7 @@
 # Welt: Lebenszeit eines Containers ohne Behandlung lognormal (Median 4 Tage, σ 0,9 der Log-Skala), wie in verweilzeit-demo
 MEDIAN, SIGMA = 4.0, 0.9
 
-BETA_MIN, BETA_MAX, DEFAULT_BETA, BETA_STEP = -1.0, 0.5, 0.0, 0.1   # wahre Wirkung der Behandlung auf die Rate (log-Hazard-Verhältnis)
+BETA_MIN, BETA_MAX, DEFAULT_BETA, BETA_STEP = -1.0, 0.5, 0.0, 0.1   # wahre Wirkung der Behandlung auf die Rate (log-Hazard-Ratio)
 WAIT_MIN, WAIT_MAX, DEFAULT_WAIT, WAIT_STEP = 0.5, 16.0, 4.0, 0.5    # mittlere Wartezeit bis zum Behandlungsbeginn (Exponential), in Tagen
 N_MIN, N_MAX, DEFAULT_N, N_STEP = 100, 2000, 1000, 100                # Container je Lauf
 SEED_MAX, DEFAULT_SEED = 999999, 35
@@ -46,8 +46,8 @@ PRESET_HELP = {
 ASSUMPTIONS_MARKDOWN = """\
 **Annahmen dieser Demo**
 - **Zensierung unabhängig vom Ereignis:** In dieser Welt gibt es keine Zensierung, jeder Container wird bis zu seinem Ausfall beobachtet. Die Annahme wird hier nicht gebraucht und nicht geprüft; mit Zensierung ist nichts gemessen.
-- **Die Behandlung beginnt unabhängig von der Lebenszeit ohne Behandlung und vom Zustand des Containers** (Beginn nach einer Exponential-Wartezeit, ohne Blick auf den Container; bei β ≠ 0 hängt die beobachtete Lebenszeit über die Wirkung vom Beginn ab). Wird nach dem Zustand behandelt, kommt ein Störfaktor hinzu; das ist hier nicht gemessen.
-- **Die Wirkung ist konstant:** Ab dem Beginn gilt die Rate mal e^β, vorher die Grundrate. Die Grundrate ist lognormal (Median 4 Tage, σ = 0,9). Andere Formen der Wirkung oder der Grundrate sind nicht gemessen.
+- **Die Behandlung beginnt unabhängig von der Lebenszeit ohne Behandlung und vom Zustand des Containers** (Beginn nach einer Exponential-Wartezeit, ohne Blick auf den Container; bei β ≠ 0 hängt die beobachtete Lebenszeit über die Wirkung vom Beginn ab). Wird nach dem Zustand behandelt, kommt ein Confounder hinzu; das ist hier nicht gemessen.
+- **Die Wirkung ist konstant:** Ab dem Beginn gilt die Rate mal e^β, vorher der Baseline-Hazard. Der Baseline-Hazard ist lognormal (Median 4 Tage, σ = 0,9). Andere Formen der Wirkung oder des Baseline-Hazards sind nicht gemessen.
 - **Die Container sind unabhängig voneinander;** es gibt keine unbeobachtete Anfälligkeit und keine weiteren Merkmale.
 
 **Grenzen**

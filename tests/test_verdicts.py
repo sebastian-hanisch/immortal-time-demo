@@ -52,11 +52,11 @@ def test_verdikt_handbeispiel_andere_landmarke_und_leere_gruppen():
 def test_verdikt_naiv_ohne_wirkung_und_mit_wirkung_und_schaden():
     kind, text = ev.verdict_naive(_study(0.0, -1.28, 0.0, (0.0, 0.0)))
     assert kind == "warning" and "wirkt die Behandlung nicht (β = 0)" in text
-    assert "β̂ = −1,28 ± 0,100" in text and "Hazard-Verhältnis 0,28" in text and "Der Schutz ist Schein, 60 % der Container zählen als behandelt" in text
+    assert "β̂ = −1,28 ± 0,100" in text and "Hazard-Ratio 0,28" in text and "Der Schutz ist Schein, 60 % der Container zählen als behandelt" in text
     kind, text = ev.verdict_naive(_study(-0.5, -1.72, -0.5, (-0.2, -0.2)))
-    assert kind == "warning" and "die Behandlung die Rate (β = −0,5, Hazard-Verhältnis 0,61)" in text and "mehr Schutz, als die Wahrheit enthält (Wahrheit β = −0,5)" in text
+    assert kind == "warning" and "die Behandlung die Rate (β = −0,5, Hazard-Ratio 0,61)" in text and "mehr Schutz, als die Wahrheit enthält (Wahrheit β = −0,5)" in text
     kind, text = ev.verdict_naive(_study(0.5, -0.87, 0.5, (0.3, 0.3)))
-    assert kind == "warning" and "die Behandlung die Rate (β = +0,5, Hazard-Verhältnis 1,65)" in text and "Der Schutz ist Schein" in text
+    assert kind == "warning" and "die Behandlung die Rate (β = +0,5, Hazard-Ratio 1,65)" in text and "Der Schutz ist Schein" in text
     kind, text = ev.verdict_naive(_study(-0.5, -0.5, -0.5, (-0.2, -0.2)))
     assert kind == "info" and "nicht kleiner als die Wahrheit" in text
     assert "1 Läufen gab es kein Ergebnis" in ev.verdict_naive(_study(0.0, -1.28, 0.0, (0.0, 0.0), failed_naive=1))[1]
